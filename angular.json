@@ -2,7 +2,66 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "",
-  "projects": {},
+  "projects": {
+    "nx-cats": {
+      "root": "apps/nx-cats",
+      "sourceRoot": "apps/nx-cats/src",
+      "projectType": "application",
+      "prefix": "nx-cats",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/builders:node-build",
+          "options": {
+            "outputPath": "dist/apps/nx-cats",
+            "main": "apps/nx-cats/src/main.ts",
+            "tsConfig": "apps/nx-cats/tsconfig.app.json",
+            "assets": [
+              "apps/nx-cats/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/nx-cats/src/environments/environment.ts",
+                  "with": "apps/nx-cats/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/builders:node-execute",
+          "options": {
+            "buildTarget": "nx-cats:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/nx-cats/tsconfig.app.json",
+              "apps/nx-cats/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "apps/nx-cats/jest.config.js",
+            "tsConfig": "apps/nx-cats/tsconfig.spec.json"
+          }
+        }
+      }
+    }
+  },
   "cli": {
     "warnings": {
       "typescriptMismatch": false,
